@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Todo App</title>
+</head>
+<body>
+  <h2>Docker Todo App</h2>
+
+  <input id="task" placeholder="Enter task" />
+  <button onclick="addTodo()">Add</button>
+
+  <ul id="list"></ul>
+
+  <script>
+    const API = "http://localhost:5000";
+
+    function loadTodos() {
+      fetch(API + "/todos")
+        .then(res => res.json())
+        .then(data => {
+          const list = document.getElementById("list");
+          list.innerHTML = "";
+          data.forEach(t => {
+            const li = document.createElement("li");
+            li.innerText = t.task;
+            list.appendChild(li);
+          });
+        });
+    }
+
+    function addTodo() {
+      const task = document.getElementById("task").value;
+
+      fetch(API + "/todos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task })
+      }).then(() => {
+        loadTodos();
+      });
+    }
+
+    loadTodos();
+  </script>
+</body>
+</html>
