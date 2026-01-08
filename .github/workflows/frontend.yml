@@ -1,4 +1,4 @@
-name: Frontend CI/CD to ECR
+name: Secure Frontend CI/CD to ECR (OIDC)
 
 on:
   push:
@@ -6,19 +6,22 @@ on:
       - main
 
 jobs:
-  frontend-build-push:
+  build-and-push:
     runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Configure AWS credentials
+      - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
 
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
@@ -31,8 +34,9 @@ jobs:
       - name: Tag frontend Docker image
         run: |
           docker tag todo-frontend:latest \
-          179707674760.dkr.ecr.us-east-1.amazonaws.com/todo-frontend:latest
+          <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/todo-frontend:latest
 
       - name: Push frontend Docker image to ECR
         run: |
-          docker push 179707674760.dkr.ecr.us-east-1.amazonaws.com/todo-frontend:latest
+          docker push \
+          <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/todo-frontend:latest

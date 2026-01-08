@@ -10,31 +10,39 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      id-token: write
+      id-token: write       # REQUIRED for OIDC
       contents: read
 
     steps:
+      # 1️⃣ Checkout repository code
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2️⃣ Configure AWS credentials using OIDC (NO ACCESS KEYS)
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: us-east-1
+          aws-region: us-east-1   # MUST match your ECR region
 
+      # 3️⃣ Login Docker to Amazon ECR
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
 
+      # 4️⃣ Build backend Docker image
       - name: Build Docker image
         run: |
+          cd backend
           docker build -t todo-backend .
 
+      # 5️⃣ Tag Docker image with ECR repository URI
       - name: Tag Docker image
         run: |
           docker tag todo-backend:latest \
-          179707674760.dkr.ecr.us-east-1.amazonaws.com/todo-backend
+          179707674760.dkr.ecr.us-east-1.amazonaws.com/todo-backend:latest
+
+      # 6️⃣ Push Docker image to ECR
       - name: Push Docker image to ECR
         run: |
           docker push \
-          179707674760.dkr.ecr.us-east-1.amazonaws.com/todo-backend
+          179707674760.dkr.ecr.us-east-1.amazonaws.com/todo-backend:latest
