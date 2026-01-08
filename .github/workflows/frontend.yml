@@ -34,9 +34,9 @@ jobs:
       - name: Tag frontend Docker image
         run: |
           docker tag todo-frontend:latest \
-          <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/todo-frontend:latest
+          179707674760.dkr.ecr.us-east-1.amazonaws.com/todo-frontend:latest
 
       - name: Push frontend Docker image to ECR
         run: |
           docker push \
-          <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/todo-frontend:latest
+          179707674760.dkr.ecr.us-east-1.amazonaws.com/todo-frontend:latest
