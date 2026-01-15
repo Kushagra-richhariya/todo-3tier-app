@@ -34,7 +34,7 @@ jobs:
       - name: Tag frontend Docker image
         run: |
           docker tag todo-frontend:latest \
-          179707674760.dkr.ecr.ap-south-1.amazonaws.com/todo-backend
+          179707674760.dkr.ecr.ap-south-1.amazonaws.com/todo-frontend
 
       - name: Push frontend Docker image to ECR
         run: |
