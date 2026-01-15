@@ -45,4 +45,4 @@ jobs:
       - name: Push Docker image to ECR
         run: |
           docker push \
-          179707674760.dkr.ecr.ap-south-1.amazonaws.com/todo-frontend
+          179707674760.dkr.ecr.ap-south-1.amazonaws.com/todo-backend
