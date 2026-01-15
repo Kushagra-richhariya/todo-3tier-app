@@ -23,7 +23,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: us-east-1   # MUST match your ECR region
+          aws-region: ap-south-1   # MUST match your ECR region
 
       # 3️⃣ Login Docker to Amazon ECR
       - name: Login to Amazon ECR
